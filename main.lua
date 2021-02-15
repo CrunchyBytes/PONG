@@ -89,6 +89,7 @@ function love.update(dt)
 
 		-- Detectar colisiones con los jugadores.
 		if ball:collides(player1) then
+			love.audio.play(paddle_hit)
 			ball.dx = -ball.dx * 1.03
 			ball.x = player1.x + ball.width + 1 -- En caso de que el desplazamiento sea mínimo, y registre múltiples colisiones.
 
@@ -100,6 +101,7 @@ function love.update(dt)
 		end
 
 		if ball:collides(player2) then
+			love.audio.play(paddle_hit)
 			ball.dx = -ball.dx * 1.03
 			ball.x = player2.x - ball.width - 1 -- En caso de que el desplazamiento sea mínimo, y registre múltiples colisiones.
 
