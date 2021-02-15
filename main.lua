@@ -64,7 +64,7 @@ function love.load()
 	
 	gameState = 'start'
 
-	numberOfSets = 1
+	numberOfSets = 3
 	winningPlayer = 0
 end
 
@@ -73,11 +73,9 @@ function love.update(dt)
 	if gameState == 'serve' then
 		-- 
 		if servingPlayer == 1 then
-			ball.dx = math.random(100, 150)
-			--servingPlayer = 2
+			ball.dx = math.random(100, 150)			
 		else
-			ball.dx = -math.random(100, 150)
-			--servingPlayer = 2
+			ball.dx = -math.random(100, 150)			
 		end
 		ball.dy = math.random(-50, 50)
 
@@ -142,7 +140,7 @@ function love.update(dt)
 			gameState = 'finish'
 		else
 			--ball:reset()
-			gameState = 'serve' --'start'
+			gameState = 'serve'
 		end
 	end
 
@@ -195,10 +193,7 @@ function love.update(dt)
 
 	if gameState == 'play' then
 		-- Llamar a la función update de la pelota.
-		ball:update(dt) 
-		-- Coordenada en x en la pelota es la anterior + un desplazamiento definido.
-		--ballX = ballX + (ballDX * dt)
-		--ballY = ballY + (ballDY * dt)
+		ball:update(dt) 		
 	end
 
 	-- Llamar a las funciones update de cada jugador, para actualizar sus posiciones.
@@ -212,10 +207,9 @@ function love.keypressed(key)
 	
 	-- Cuando cargue el juego (presiona enter), la pelota se empieza a mover	
 	elseif key == 'enter' or key == 'return' then
-		if gameState == 'start' then
-			--love.audio.stop(background_music)
+		if gameState == 'start' then			
 			background_music:setVolume(0.5)
-			gameState = 'serve' --'play' --SERVE
+			gameState = 'serve'
 
 		elseif gameState == 'serve' then
 			gameState = 'play'
@@ -231,6 +225,7 @@ function love.keypressed(key)
 			-- Resetea la posición de la pelota.
 			ball:reset()
 
+			-- El jugador que no haya ganado es el que saca.
 			if winningPlayer == 1 then
 				servingPlayer = 2
 			else
@@ -241,14 +236,7 @@ function love.keypressed(key)
 			gameState = 'start' -- review
 			
 			-- Se reinician las coordenadas de la pelota.
-			ball:reset()
-
-			--[[ballX = VIRTUAL_WIDTH/2 - 2
-			ballY = VIRTUAL_HEIGHT/2 - 2
-
-			ballDX = math.random(2) == 1 and 100 or -100 --Operador ternario en Lua.
-			ballDY = math.random(-50, 50)
-			]]
+			ball:reset()			
 		end
 	end
 end
@@ -261,65 +249,68 @@ function love.draw()
 	-- Welcoming text
 	if gameState == 'start' then
 		love.graphics.printf(
-			'Welcome to...',--PONG!\nPress Enter to continue.',			-- text to render
+			'Welcome to...',
 			0,						-- starting X
-			20, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
+			20,  					-- starting Y (halfway down the screen)
 			VIRTUAL_WIDTH,			-- # of pixels to center within
 			'center'				-- alignment mode: {'center', 'left', 'right'}
 			)
 
 		love.graphics.setFont(titleFont)
 		love.graphics.printf(
-			'PONG',			-- text to render
+			'PONG',					-- text to render
 			0,						-- starting X
-			30, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
+			30, 					-- starting Y (halfway down the screen)
 			VIRTUAL_WIDTH,			-- # of pixels to center within
 			'center'				-- alignment mode: {'center', 'left', 'right'}
 			)
 
 		love.graphics.setFont(smallFont)
 		love.graphics.printf(
-			'Press Enter to continue.',--PONG!\nPress Enter to continue.',			-- text to render
-			0,						-- starting X
-			110, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
-			VIRTUAL_WIDTH,			-- # of pixels to center within
-			'center'				-- alignment mode: {'center', 'left', 'right'}
+			'Press Enter to continue.',	-- text to render
+			0,							-- starting X
+			110, 						-- starting Y (halfway down the screen)
+			VIRTUAL_WIDTH,				-- # of pixels to center within
+			'center'					-- alignment mode: {'center', 'left', 'right'}
 			)
 
 		-- Draw racket
 		love.graphics.draw(racket, VIRTUAL_WIDTH/2, VIRTUAL_HEIGHT/2, 0, 0.5, 0.5)
 
+	-- Anuncia jugador que irá a sacar
 	elseif gameState == 'serve' then
 		love.graphics.printf(
-			'Ready player ' ..tostring(servingPlayer) ..'? \nPress Enter to serve.',			-- text to render
-			0,						-- starting X
-			20, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
-			VIRTUAL_WIDTH,			-- # of pixels to center within
-			'center'				-- alignment mode: {'center', 'left', 'right'}
+			'Ready player ' ..tostring(servingPlayer) ..'? \nPress Enter to serve.',			
+			0,						
+			20, 
+			VIRTUAL_WIDTH,			
+			'center'				
 			)
 
 	elseif gameState == 'play' then
 		-- empty, for now
 	
+	-- Anuncia al ganador una vez que el juego haya terminado.
 	elseif gameState == 'finish' then
 		love.graphics.setFont(scoreFont)
 		love.graphics.printf(
-			'Congratulations!',			-- text to render
-			0,						-- starting X
-			20, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
-			VIRTUAL_WIDTH,			-- # of pixels to center within
-			'center'				-- alignment mode: {'center', 'left', 'right'}
+			'Congratulations!',			
+			0,						
+			20, 
+			VIRTUAL_WIDTH,			
+			'center'				
 			)
 
 		love.graphics.setFont(smallFont)
 		love.graphics.printf(
-			'Player ' ..tostring(winningPlayer) ..' wins!! \nPress Enter to play again.',			-- text to render
-			0,						-- starting X
-			50, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
-			VIRTUAL_WIDTH,			-- # of pixels to center within
-			'center'				-- alignment mode: {'center', 'left', 'right'}
+			'Player ' ..tostring(winningPlayer) ..' wins!! \nPress Enter to play again.',			-
+			0,						
+			50, 
+			VIRTUAL_WIDTH,			
+			'center'				
 			)
 
+		-- El jugador que gane se lleva el trofeo.
 		if winningPlayer == 1 then
 			love.graphics.draw(trophy, player1.x + 45, VIRTUAL_HEIGHT/2, 0, 0.25, 0.25)
 		else
@@ -346,19 +337,15 @@ function love.draw()
 			)
 
 		-- Render left paddle
-		player1:render()
-		--love.graphics.rectangle('fill', 10, player1Y, 5, 20) -- mode={fill, line}, x, y, width, height
+		player1:render()		
 
 		-- Render right paddle
-		player2:render()
-		--love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20) -- mode={fill, line}, x, y, width, height
+		player2:render()		
 
 		-- Render pong ball, a la mitad y al centro de la pantalla
-		ball:render()
-		--love.graphics.rectangle('fill', ballX, ballY, 4, 4)--VIRTUAL_WIDTH/2 - 2, VIRTUAL_HEIGHT/2 - 2, 4, 4) -- mode={fill, line}, x, y, width, height
+		ball:render()		
 	end
 
 	push:apply("end")
-
 	
 end
