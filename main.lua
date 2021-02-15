@@ -116,13 +116,14 @@ function love.update(dt)
 	-- Actualizar score de cada jugador.
 	-- Jugador 2 anota: incrementa su contador, y saca el jugador contrario.
 	if ball.x < 0 then
-		if player2Score ~= numberOfSets then
-			love.audio.play(point_scored)
-		end
-
+		
 		player2Score = player2Score + 1
 		servingPlayer = 1
 		ball:reset()
+		
+		if player2Score < numberOfSets then
+			love.audio.play(point_scored)
+		end
 
 		-- Jugador 2 ha ganado.
 		if player2Score == numberOfSets then
@@ -136,14 +137,15 @@ function love.update(dt)
 	end
 
 	-- Jugador 1 anota
-	if ball.x > VIRTUAL_WIDTH then
-		if player1Score ~= numberOfSets then
-			love.audio.play(point_scored)
-		end
-		
+	if ball.x > VIRTUAL_WIDTH then		
+
 		player1Score = player1Score + 1
 		servingPlayer = 2
 		ball:reset()
+
+		if player1Score < numberOfSets then
+			love.audio.play(point_scored)
+		end
 
 		-- Jugador 1 ha ganado.
 		if player1Score == numberOfSets then
