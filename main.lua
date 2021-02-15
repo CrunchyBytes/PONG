@@ -40,6 +40,9 @@ function love.load()
 
 	title_music = love.audio.newSource("Audio/Title Screen Music.mp3", "stream")
 
+	-- Graphics
+	trophy = love.graphics.newImage("Graphics/Trophy.png")
+
 	-- Inicialización de los jugadores.
 	player1 = Paddle(10, 30, 5, 20)
 	player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 50, 5, 20)
@@ -57,7 +60,7 @@ function love.load()
 	gameState = 'start'
 	love.audio.play(title_music)
 
-	numberOfSets = 3
+	numberOfSets = 1
 	winningPlayer = 0
 end
 
@@ -290,6 +293,13 @@ function love.draw()
 			VIRTUAL_WIDTH,			-- # of pixels to center within
 			'center'				-- alignment mode: {'center', 'left', 'right'}
 			)
+
+		if winningPlayer == 1 then
+			love.graphics.draw(trophy, player1.x + 45, VIRTUAL_HEIGHT/2, 0, 0.25, 0.25)
+		else
+			love.graphics.draw(trophy, player2.x - 105, VIRTUAL_HEIGHT/2, 0, 0.25, 0.25)
+		end
+
 	end -- revisar otros estados.
 
 	love.graphics.setFont(scoreFont)
