@@ -38,6 +38,8 @@ function love.load()
 	point_scored = love.audio.newSource("Audio/point_scored.wav", "stream")
 	ceiling_colision = love.audio.newSource("Audio/ceiling_colision.wav", "stream")
 
+	title_music = love.audio.newSource("Audio/Title Screen Music.mp3", "stream")
+
 	-- Inicialización de los jugadores.
 	player1 = Paddle(10, 30, 5, 20)
 	player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 50, 5, 20)
@@ -53,6 +55,7 @@ function love.load()
 	servingPlayer = 1
 	
 	gameState = 'start'
+	love.audio.play(title_music)
 
 	numberOfSets = 3
 	winningPlayer = 0
@@ -203,6 +206,7 @@ function love.keypressed(key)
 	-- Cuando cargue el juego (presiona enter), la pelota se empieza a mover	
 	elseif key == 'enter' or key == 'return' then
 		if gameState == 'start' then
+			love.audio.stop(title_music)
 			gameState = 'serve' --'play' --SERVE
 
 		elseif gameState == 'serve' then
