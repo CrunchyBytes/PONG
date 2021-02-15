@@ -39,7 +39,10 @@ function love.load()
 	point_scored = love.audio.newSource("Audio/point_scored.wav", "stream")
 	ceiling_colision = love.audio.newSource("Audio/ceiling_colision.wav", "stream")
 
-	title_music = love.audio.newSource("Audio/Title Screen Music.mp3", "stream")
+	background_music = love.audio.newSource("Audio/Ping Pong OST.mp3", "stream")
+	background_music:setLooping(true)
+	--love.audio.play(background_music)
+	background_music:play()
 
 	-- Graphics
 	trophy = love.graphics.newImage("Graphics/Trophy.png")
@@ -60,7 +63,6 @@ function love.load()
 	servingPlayer = 1
 	
 	gameState = 'start'
-	love.audio.play(title_music)
 
 	numberOfSets = 1
 	winningPlayer = 0
@@ -211,7 +213,8 @@ function love.keypressed(key)
 	-- Cuando cargue el juego (presiona enter), la pelota se empieza a mover	
 	elseif key == 'enter' or key == 'return' then
 		if gameState == 'start' then
-			love.audio.stop(title_music)
+			--love.audio.stop(background_music)
+			background_music:setVolume(0.5)
 			gameState = 'serve' --'play' --SERVE
 
 		elseif gameState == 'serve' then
