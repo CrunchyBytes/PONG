@@ -20,11 +20,12 @@ function love.load()
 	-- Generar seed de aleatoriedad.
 	math.randomseed(os.time())
 	
-	-- Se carga una nueva fuente, llamada "font.ttf" en el directorio actual, y de tamaño 8.
+	-- Fonts.
 	smallFont = love.graphics.newFont("font.ttf", 8)
 	love.graphics.setFont(smallFont)
 
 	scoreFont = love.graphics.newFont("font.ttf", 32)
+	titleFont = love.graphics.newFont("font.ttf", 58)
 
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, { --game resolution, window resolution, fullscreen
 		fullscreen = false,
@@ -42,6 +43,7 @@ function love.load()
 
 	-- Graphics
 	trophy = love.graphics.newImage("Graphics/Trophy.png")
+	racket = love.graphics.newImage("Graphics/Ping Pong Racket.png")
 
 	-- Inicialización de los jugadores.
 	player1 = Paddle(10, 30, 5, 20)
@@ -256,16 +258,37 @@ function love.draw()
 	-- Welcoming text
 	if gameState == 'start' then
 		love.graphics.printf(
-			'Welcome to PONG!\nPress Enter to continue.',			-- text to render
+			'Welcome to...',--PONG!\nPress Enter to continue.',			-- text to render
 			0,						-- starting X
 			20, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
 			VIRTUAL_WIDTH,			-- # of pixels to center within
 			'center'				-- alignment mode: {'center', 'left', 'right'}
 			)
 
+		love.graphics.setFont(titleFont)
+		love.graphics.printf(
+			'PONG',			-- text to render
+			0,						-- starting X
+			30, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
+			VIRTUAL_WIDTH,			-- # of pixels to center within
+			'center'				-- alignment mode: {'center', 'left', 'right'}
+			)
+
+		love.graphics.setFont(smallFont)
+		love.graphics.printf(
+			'Press Enter to continue.',--PONG!\nPress Enter to continue.',			-- text to render
+			0,						-- starting X
+			110, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
+			VIRTUAL_WIDTH,			-- # of pixels to center within
+			'center'				-- alignment mode: {'center', 'left', 'right'}
+			)
+
+		-- Draw racket
+		love.graphics.draw(racket, VIRTUAL_WIDTH/2, VIRTUAL_HEIGHT/2, 0, 0.5, 0.5)
+
 	elseif gameState == 'serve' then
 		love.graphics.printf(
-			'Player ' ..tostring(servingPlayer) ..'\'s turn. \nPress Enter to serve.',			-- text to render
+			'Ready player ' ..tostring(servingPlayer) ..'? \nPress Enter to serve.',			-- text to render
 			0,						-- starting X
 			20, --VIRTUAL_HEIGHT/2 - 6,	-- starting Y (halfway down the screen)
 			VIRTUAL_WIDTH,			-- # of pixels to center within
@@ -304,31 +327,33 @@ function love.draw()
 
 	love.graphics.setFont(scoreFont)
 	
-	-- Score Player 1
-	love.graphics.print(
-		tostring(player1Score),
-		VIRTUAL_WIDTH / 2 - 50,
-		VIRTUAL_HEIGHT / 3
-		)
+	if gameState ~= 'start' then
+		-- Score Player 1
+		love.graphics.print(
+			tostring(player1Score),
+			VIRTUAL_WIDTH / 2 - 50,
+			VIRTUAL_HEIGHT / 3
+			)
 
-	-- Score Player 2
-	love.graphics.print(
-		tostring(player2Score),
-		VIRTUAL_WIDTH / 2 + 30,
-		VIRTUAL_HEIGHT / 3
-		)
+		-- Score Player 2
+		love.graphics.print(
+			tostring(player2Score),
+			VIRTUAL_WIDTH / 2 + 30,
+			VIRTUAL_HEIGHT / 3
+			)
 
-	-- Render left paddle
-	player1:render()
-	--love.graphics.rectangle('fill', 10, player1Y, 5, 20) -- mode={fill, line}, x, y, width, height
+		-- Render left paddle
+		player1:render()
+		--love.graphics.rectangle('fill', 10, player1Y, 5, 20) -- mode={fill, line}, x, y, width, height
 
-	-- Render right paddle
-	player2:render()
-	--love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20) -- mode={fill, line}, x, y, width, height
+		-- Render right paddle
+		player2:render()
+		--love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20) -- mode={fill, line}, x, y, width, height
 
-	-- Render pong ball, a la mitad y al centro de la pantalla
-	ball:render()
-	--love.graphics.rectangle('fill', ballX, ballY, 4, 4)--VIRTUAL_WIDTH/2 - 2, VIRTUAL_HEIGHT/2 - 2, 4, 4) -- mode={fill, line}, x, y, width, height
+		-- Render pong ball, a la mitad y al centro de la pantalla
+		ball:render()
+		--love.graphics.rectangle('fill', ballX, ballY, 4, 4)--VIRTUAL_WIDTH/2 - 2, VIRTUAL_HEIGHT/2 - 2, 4, 4) -- mode={fill, line}, x, y, width, height
+	end
 
 	push:apply("end")
 
