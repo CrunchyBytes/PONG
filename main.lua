@@ -116,12 +116,17 @@ function love.update(dt)
 	-- Actualizar score de cada jugador.
 	-- Jugador 2 anota: incrementa su contador, y saca el jugador contrario.
 	if ball.x < 0 then
-		love.audio.play(point_scored)
+		if player2Score ~= numberOfSets then
+			love.audio.play(point_scored)
+		end
+
 		player2Score = player2Score + 1
 		servingPlayer = 1
 		ball:reset()
 
+		-- Jugador 2 ha ganado.
 		if player2Score == numberOfSets then
+			love.audio.play(match_victory)
 			winningPlayer = 2
 			gameState = 'finish'
 		else
@@ -132,12 +137,17 @@ function love.update(dt)
 
 	-- Jugador 1 anota
 	if ball.x > VIRTUAL_WIDTH then
-		love.audio.play(point_scored)
+		if player1Score ~= numberOfSets then
+			love.audio.play(point_scored)
+		end
+		
 		player1Score = player1Score + 1
 		servingPlayer = 2
 		ball:reset()
 
+		-- Jugador 1 ha ganado.
 		if player1Score == numberOfSets then
+			love.audio.play(match_victory)
 			winningPlayer = 1
 			gameState = 'finish'
 		else			
@@ -148,10 +158,10 @@ function love.update(dt)
 	-- Movimiento del jugador 1.
 	if love.keyboard.isDown('w') then -- @param: cuál tecla es presionada.
 		player1.dy = -PADDLE_SPEED
-		--player1Y = math.max(0, player1Y - (dt * PADDLE_SPEED))
+		
 	elseif love.keyboard.isDown('s') then
 		player1.dy = PADDLE_SPEED
-		--player1Y = math.min(VIRTUAL_HEIGHT - 20, player1Y + (dt * PADDLE_SPEED)) -- Se le resta 20 a VIRTUAL_HEIGHT debido a que es la altura de la paleta.
+		
 	else
 		--El jugador se queda en su lugar si no tiene presionado ninguna de las dos teclas.
 		player1.dy = 0
@@ -160,10 +170,10 @@ function love.update(dt)
 	-- Movimiento del jugador 2.
 	if love.keyboard.isDown('up') then
 		player2.dy = -PADDLE_SPEED
-		--player2Y = math.max(0, player2Y - (dt * PADDLE_SPEED))
+		
 	elseif love.keyboard.isDown('down') then
 		player2.dy = PADDLE_SPEED
-		--player2Y = math.min(VIRTUAL_HEIGHT - 20, player2Y + (dt * PADDLE_SPEED))
+		
 	else
 		--El jugador se queda en su lugar si no tiene presionado ninguna de las dos teclas.
 		player2.dy = 0
